@@ -1,7 +1,9 @@
-/node_modules
-/build
-/dist
+node_modules
+build
+dist
+.next
+.idea
 package-lock.json
-tailwind.config.js
+tailwind.config.ts
 postcss.config.js
 next.config.js

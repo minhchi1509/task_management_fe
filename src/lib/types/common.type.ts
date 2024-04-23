@@ -1,8 +1,4 @@
-export type TURLPageProps = {
-  params: {
-    [key: string]: string | undefined;
-  };
-  searchParams?: {
-    [key: string]: string | undefined;
-  };
-};
+export interface TURLPageProps {
+  params: Record<string, string | undefined>;
+  searchParams?: Record<string, string | undefined>;
+}

@@ -1,4 +1,4 @@
-import { ErrorResponse, IApiResponse } from 'src/lib/types/api-response.type';
+import { ErrorResponse, IApiResponse } from 'src/lib/types/error-response.type';
 
 export const delay = (seconds: number) =>
   new Promise((resolve) => {

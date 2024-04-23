@@ -1,45 +1,52 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 import { withAuth } from 'next-auth/middleware';
+import createIntlMiddleware from 'next-intl/middleware';
 
-export default withAuth(
-  async function middleware(req) {
-    const token = req.nextauth.token; // or await getToken({ req });
+const intlMiddleware = createIntlMiddleware({
+  locales: ['en', 'vi'],
+  defaultLocale: 'en'
+});
 
-    const isAuthenticated = !!token;
-
-    const pathname = req.nextUrl.pathname;
-    const authPageRegex = /^(\/login|\/register)/g;
-    const apiPageRegex = /^(\/api)/g;
-    const isAuthPage = authPageRegex.test(pathname);
-    const isApiPage = apiPageRegex.test(pathname);
-
-    if (isApiPage) {
-      const requestHeaders = new Headers(req.headers);
-      // requestHeaders.set("x-hello-from-middleware1", "hello");
-      const response = NextResponse.next({
-        request: {
-          headers: requestHeaders
-        }
-      });
-      return response;
-    }
-
-    if (isAuthPage) {
-      if (isAuthenticated) {
-        return NextResponse.redirect(new URL('/', req.url));
-      }
-      return null;
-    }
-
-    if (!isAuthenticated) {
-      return NextResponse.redirect(new URL('/login', req.url));
-    }
+const authMiddleware = withAuth(
+  function onSuccess(req) {
+    return intlMiddleware(req);
   },
   {
     callbacks: {
-      authorized() {
-        return true;
-      }
+      authorized: ({ token }) => token != null
     }
   }
 );
+
+export default async function middleware(req: NextRequest) {
+  const token = await getToken({ req });
+  const isAuthenticated = !!token;
+  // Page mà khi đăng nhập rồi sẽ không thể truy cập
+  const unAuthenticatedPathnameRegex =
+    /^(\/(en|vi))?(\/register|\/login)+\/?$/i;
+
+  // Page mà cả khi đăng nhập và không đăng nhập đều có thể truy cập
+  const publicPathnameRegex = /^(\/(en|vi))?(\/public)+\/?$/i;
+
+  const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname);
+  const isUnAuthenticatedPage = unAuthenticatedPathnameRegex.test(
+    req.nextUrl.pathname
+  );
+
+  if (isPublicPage) {
+    return intlMiddleware(req);
+  }
+
+  if (isUnAuthenticatedPage) {
+    if (isAuthenticated) {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
+    return intlMiddleware(req);
+  }
+  return (authMiddleware as any)(req);
+}
+
+export const config = {
+  matcher: ['/((?!api|_next|.*\\..*).*)']
+};

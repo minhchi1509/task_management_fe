@@ -1,14 +1,12 @@
-import { Account, DefaultUser, Profile } from 'next-auth';
+import { Account, Profile } from 'next-auth';
 
 interface ICredentialsUser {
   id: string;
   fullName: string;
   email: string;
-  role: string;
-  avatar?: string;
   accessToken: string;
-  accessTokenExpiry: number;
-  authenticationType: string;
+  // accessTokenExpiry: number;
+  // authenticationType: string;
 }
 
 interface IOAuthProfile extends Account, Profile {}
@@ -21,6 +19,10 @@ declare module 'next-auth' {
   interface User extends IUser {}
   interface Session {
     user?: IUser;
+  }
+
+  interface Profile {
+    picture?: string;
   }
 }
 

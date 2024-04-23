@@ -1,0 +1,9 @@
+{
+  "Login": {
+    "userNameInputLabel": "User name",
+    "passwordInputLabel": "Password",
+    "userNameRequired": "Please enter username",
+    "passwordRequired": "Please enter a password",
+    "loginButton": "Log in"
+  }
+}

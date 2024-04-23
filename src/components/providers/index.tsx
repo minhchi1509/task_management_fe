@@ -1,5 +1,4 @@
 'use client';
-
 import { ConfigProvider as AntdProvider } from 'antd';
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 import { PropsWithChildren } from 'react';

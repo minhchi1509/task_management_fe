@@ -1,10 +1,10 @@
-import { NextAuthOptions } from 'next-auth';
+import { NextAuthOptions, User } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 
-import { login } from 'src/lib/services/auth.service';
-import { ErrorResponse } from 'src/lib/types/api-response.type';
+import { login } from 'src/lib/actions/auth.actions';
+import { ErrorResponse } from 'src/lib/types/error-response.type';
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -17,10 +17,16 @@ const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          const user = await login(
-            credentials?.username,
-            credentials?.password
+          const responseData = await login(
+            credentials?.username || '',
+            credentials?.password || ''
           );
+          const user: User = {
+            id: responseData?.user.id || '',
+            email: responseData?.user.email || '',
+            fullName: responseData?.user.fullName || '',
+            accessToken: responseData?.accessToken || ''
+          };
           return user;
         } catch (error) {
           throw new Error((error as ErrorResponse).message);
@@ -43,14 +49,14 @@ const authOptions: NextAuthOptions = {
     async signIn({ user, account, profile }) {
       //account.provider chính là cái "id" ta đặt bên trên
       if (account?.provider !== 'credentials') {
-        user.oAuthProfile = { ...profile, ...account, ...user } as any;
+        user.oAuthProfile = { ...profile, ...account } as any;
       }
-      user.avatar = (user.oAuthProfile?.picture || user.avatar) as string;
-      user.fullName = (user.oAuthProfile?.name || user.name) as string;
+      user.fullName = profile?.name || user.fullName || '';
       return true;
     },
     async jwt({ token, user }) {
-      //Đoạn if dưới đây chỉ chạy 1 lần duy nhất khi user sign in
+      //Hàm if dưới đây chỉ chạy 1 lần duy nhất khi user sign in
+      //"user" là giá trị trả về từ hàm "signIn" ở bên trên
       if (user) {
         token = { ...user };
       }
