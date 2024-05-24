@@ -3,7 +3,11 @@ const createNextIntlPlugin = require('next-intl/plugin');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: false,
+  sassOptions: {
+    includePaths: [path.join(__dirname, 'src/themes')]
+  },
   webpack(config, { isServer }) {
     if (!isServer) {
       config.resolve = {

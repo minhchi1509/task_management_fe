@@ -1,8 +1,8 @@
 'use client';
 // import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
-import { GET } from 'src/lib/actions/http-request.action';
-import { ErrorResponse } from 'src/lib/types/error-response.type';
+import { GET } from 'src/actions/http-request.action';
+import { ErrorResponse } from 'src/types/error-response.type';
 
 // import ListUsers from 'src/components/features/message/ListUser';
 // import { getUsers } from 'src/lib/services/auth.service';

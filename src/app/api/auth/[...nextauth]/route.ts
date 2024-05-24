@@ -3,8 +3,9 @@ import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 
-import { login } from 'src/lib/actions/auth.actions';
-import { ErrorResponse } from 'src/lib/types/error-response.type';
+import { login } from 'src/actions/auth.actions';
+import { TLoginRequest } from 'src/types/api/auth/login.type';
+import { ErrorResponse } from 'src/types/error-response.type';
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -17,16 +18,14 @@ const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          const responseData = await login(
-            credentials?.username || '',
-            credentials?.password || ''
-          );
-          const user: User = {
-            id: responseData?.user.id || '',
-            email: responseData?.user.email || '',
-            fullName: responseData?.user.fullName || '',
-            accessToken: responseData?.accessToken || ''
+          const loginRequest: TLoginRequest = {
+            body: {
+              email: credentials?.username || '',
+              password: credentials?.password || ''
+            }
           };
+          const responseData = await login(loginRequest);
+          const user: User = { ...responseData };
           return user;
         } catch (error) {
           throw new Error((error as ErrorResponse).message);

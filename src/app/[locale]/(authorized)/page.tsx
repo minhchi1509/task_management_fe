@@ -1,6 +1,4 @@
 'use client';
-
-import { Button } from 'antd';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next-nprogress-bar';
 
@@ -22,20 +20,19 @@ const HomePage = () => {
 
   return (
     <>
-      <Button
+      <button
         onClick={() => {
           push('/message');
         }}
-        type="primary"
       >
         Go to message page
-      </Button>
+      </button>
       {/* <Link href="/message">
         <Button type="primary">Go to message page</Button>
       </Link> */}
       <p>{session?.user?.fullName}</p>
-      <Button onClick={() => handleSignOut()}>Logout</Button>
-      <Button onClick={() => handleGetSession()}>Get Session</Button>
+      <button onClick={() => handleSignOut()}>Logout</button>
+      <button onClick={() => handleGetSession()}>Get Session</button>
     </>
   );
 };

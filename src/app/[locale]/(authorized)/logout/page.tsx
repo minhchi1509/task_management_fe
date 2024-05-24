@@ -4,7 +4,7 @@ import { signOut } from 'next-auth/react';
 import { useEffect } from 'react';
 
 import { ErrorIcon } from 'src/assets/icons';
-import { delay } from 'src/lib/utils/common-util';
+import { delay } from 'src/utils/common-util';
 
 const LogoutPage = () => {
   const handleLogout = async () => {
