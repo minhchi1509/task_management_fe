@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 
-import { AppLayoutContext } from 'src/components/layouts/AppLayout';
+import { AuthLayoutContext } from 'src/components/providers/AuthLayoutProvider';
 
 const useAppLayout = () => {
-  const value = useContext(AppLayoutContext);
+  const value = useContext(AuthLayoutContext);
   if (!value) {
     throw new Error('useAppLayout must be used within a AppLayoutProvider');
   }

@@ -1,9 +1,0 @@
-{
-  "Login": {
-    "userNameInputLabel": "Tên người dùng",
-    "passwordInputLabel": "Mật khẩu",
-    "userNameRequired": "Vui lòng nhập tên người dùng",
-    "passwordRequired": "Vui lòng nhập mật khẩu",
-    "loginButton": "Đăng nhập"
-  }
-}

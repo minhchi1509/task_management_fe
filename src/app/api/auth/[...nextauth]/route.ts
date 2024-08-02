@@ -5,7 +5,6 @@ import GoogleProvider from 'next-auth/providers/google';
 
 import { login } from 'src/actions/auth.actions';
 import { TLoginRequest } from 'src/types/api/auth/login.type';
-import { ErrorResponse } from 'src/types/error-response.type';
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -13,23 +12,19 @@ const authOptions: NextAuthOptions = {
       id: 'credentials',
       name: 'Credentials',
       credentials: {
-        username: { label: 'Username', type: 'text' },
-        password: { label: 'Password', type: 'password' }
+        email: { type: 'text' },
+        password: { type: 'password' }
       },
       async authorize(credentials) {
-        try {
-          const loginRequest: TLoginRequest = {
-            body: {
-              email: credentials?.username || '',
-              password: credentials?.password || ''
-            }
-          };
-          const responseData = await login(loginRequest);
-          const user: User = { ...responseData };
-          return user;
-        } catch (error) {
-          throw new Error((error as ErrorResponse).message);
-        }
+        const loginRequest: TLoginRequest = {
+          body: {
+            email: credentials?.email || '',
+            password: credentials?.password || ''
+          }
+        };
+        const { user, ...tokenInfor } = await login(loginRequest);
+        const responseUser: User = { ...user, ...tokenInfor };
+        return responseUser;
       }
     }),
     GoogleProvider({

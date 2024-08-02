@@ -1,169 +1,103 @@
 'use client';
-import { Box, Divider, List, Typography } from '@mui/material';
+import {
+  AppstoreOutlined,
+  MailOutlined,
+  SettingOutlined
+} from '@ant-design/icons';
+import { Layout, Menu, MenuProps } from 'antd';
 
-import { DefaultIcon } from 'src/assets/icons';
-import ListItemButton from 'src/components/features/sidebar/ListItemButton/ListItemButton';
-import { MuiDrawer } from 'src/components/layouts/sidebar/styles';
-import { HEADER_HEIGHT } from 'src/constants/variables';
+import './Sidebar.scss';
+import {
+  HEADER_HEIGHT,
+  SIDEBAR_CLOSED_WIDTH,
+  SIDEBAR_OPEN_WIDTH
+} from 'src/constants/variables';
 import useAppLayout from 'src/hooks/useAppLayout';
-import { TSidebarGroupItem } from 'src/types/sidebar.type';
 
-const sidebarMenu: TSidebarGroupItem[] = [
+type MenuItem = Required<MenuProps>['items'][number];
+const { Sider } = Layout;
+
+const items: MenuItem[] = [
   {
-    title: 'Dashboard',
-    items: [
+    key: 'sub1',
+    label: 'Navigation One',
+    icon: <MailOutlined />,
+    children: [
       {
-        title: 'Home',
-        redirectTo: '/home',
-        icon: DefaultIcon,
-        nestedItems: [
-          {
-            title: 'Starred',
-            redirectTo: '/vi/logins',
-            nestedItems: [
-              {
-                title: 'Model',
-                redirectTo: '/vi/logina',
-                nestedItems: [
-                  {
-                    title: 'Customer',
-                    redirectTo: '/vi/loginp'
-                  }
-                ]
-              },
-              {
-                title: 'Model',
-                redirectTo: '/vi/logina',
-                nestedItems: [
-                  {
-                    title: 'Customer',
-                    redirectTo: '/vi/loginp'
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            title: 'Setting',
-            redirectTo: '/default/starred',
-            nestedItems: [
-              {
-                title: 'Calendar',
-                redirectTo: '/vi/logins',
-                nestedItems: [
-                  {
-                    title: 'Category',
-                    redirectTo: '/vi/loginr'
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            title: 'Contact',
-            redirectTo: '/default/starred'
-          },
-          {
-            title: 'Starred',
-            redirectTo: '/vi/login',
-            nestedItems: [
-              {
-                title: 'Model',
-                redirectTo: '/vi/login',
-                nestedItems: [
-                  {
-                    title: 'Customer',
-                    redirectTo: '/vi/login'
-                  }
-                ]
-              },
-              {
-                title: 'Model',
-                redirectTo: '/vi/logina',
-                nestedItems: [
-                  {
-                    title: 'Customer',
-                    redirectTo: '/vi/loginp'
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            title: 'Starred',
-            redirectTo: '/vi/logins',
-            nestedItems: [
-              {
-                title: 'Model',
-                redirectTo: '/vi/logina',
-                nestedItems: [
-                  {
-                    title: 'Customer',
-                    redirectTo: '/vi/loginp'
-                  }
-                ]
-              },
-              {
-                title: 'Model',
-                redirectTo: '/vi/logina',
-                nestedItems: [
-                  {
-                    title: 'Customer',
-                    redirectTo: '/vi/loginp'
-                  }
-                ]
-              }
-            ]
-          }
+        key: 'g1',
+        label: 'Item 1',
+        type: 'group',
+        children: [
+          { key: '1', label: 'Option 1' },
+          { key: '2', label: 'Option 2' }
+        ]
+      },
+      {
+        key: 'g2',
+        label: 'Item 2',
+        type: 'group',
+        children: [
+          { key: '3', label: 'Option 3' },
+          { key: '4', label: 'Option 4' }
         ]
       }
+    ]
+  },
+  {
+    key: 'sub2',
+    label: 'Navigation Two',
+    icon: <AppstoreOutlined />,
+    children: [
+      { key: '5', label: 'Option 5' },
+      { key: '6', label: 'Option 6' },
+      {
+        key: 'sub3',
+        label: 'Submenu',
+        children: [
+          { key: '7', label: 'Option 7' },
+          { key: '8', label: 'Option 8' }
+        ]
+      }
+    ]
+  },
+  {
+    type: 'divider'
+  },
+  {
+    key: 'sub4',
+    label: 'Navigation Three',
+    icon: <SettingOutlined />,
+    children: [
+      { key: '9', label: 'Option 9' },
+      { key: '10', label: 'Option 10' },
+      { key: '11', label: 'Option 11' },
+      { key: '12', label: 'Option 12' }
     ]
   }
 ];
 
 const Sidebar = () => {
   const { openSidebar } = useAppLayout();
-  const stylesProps = { isSidebarOpen: openSidebar };
   return (
-    <MuiDrawer open={openSidebar} variant="permanent" {...stylesProps}>
-      <Box sx={{ mt: `${HEADER_HEIGHT}px` }}></Box>
-      <Box
-        sx={{
-          paddingX: +openSidebar * 2,
-          height: '100%'
-        }}
-      >
-        {sidebarMenu.map((group, index) => (
-          <>
-            <List
-              key={index}
-              {...(openSidebar &&
-                group.title && {
-                  subheader: (
-                    <Typography
-                      sx={{
-                        margin: '10px 0px 0.35em',
-                        padding: '6px',
-                        fontWeight: 600,
-                        pb: 1,
-                        fontSize: 14,
-                        lineHeight: '23px'
-                      }}
-                    >
-                      {group.title}
-                    </Typography>
-                  )
-                })}
-            >
-              {group.items.map((listItems, index) => (
-                <ListItemButton key={index} {...listItems} />
-              ))}
-            </List>
-            <Divider sx={{ mt: '2px', mb: '10px' }} />
-          </>
-        ))}
-      </Box>
-    </MuiDrawer>
+    <Sider
+      collapsed={!openSidebar}
+      className="Sidebar"
+      style={{
+        position: 'fixed',
+        left: 0,
+        overflow: 'auto',
+        height: `calc(100vh - ${HEADER_HEIGHT}px)`
+      }}
+      width={openSidebar ? SIDEBAR_OPEN_WIDTH : SIDEBAR_CLOSED_WIDTH}
+    >
+      <Menu
+        defaultSelectedKeys={['7']}
+        defaultOpenKeys={['sub2', 'sub3']}
+        mode="inline"
+        items={items}
+        onClick={(info) => console.log(info)}
+      />
+    </Sider>
   );
 };
 

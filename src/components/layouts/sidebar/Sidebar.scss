@@ -1,0 +1,12 @@
+.Sidebar {
+  padding-left: 16px;
+  padding-right: 16px;
+
+  &.ant-layout-sider.ant-layout-sider-dark {
+    & .ant-layout-sider-children {
+      ul.ant-menu {
+        border: none;
+      }
+    }
+  }
+}

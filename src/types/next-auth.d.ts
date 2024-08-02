@@ -4,9 +4,10 @@ interface ICredentialsUser {
   id: string;
   fullName: string;
   email: string;
+  avatar: string;
   accessToken: string;
-  // accessTokenExpiry: number;
-  // authenticationType: string;
+  refreshToken: string;
+  expiresIn: number;
 }
 
 interface IOAuthProfile extends Account, Profile {}

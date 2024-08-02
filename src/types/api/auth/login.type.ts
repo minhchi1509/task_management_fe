@@ -1,3 +1,5 @@
+import { TUserResponse } from 'src/types/api/entity-response.type';
+
 type TLoginBody = {
   email: string;
   password: string;
@@ -8,8 +10,8 @@ export type TLoginRequest = {
 };
 
 export type TLoginResponse = {
-  id: string;
-  email: string;
-  fullName: string;
+  user: TUserResponse;
   accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
 };

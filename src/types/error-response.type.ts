@@ -1,6 +1,7 @@
 export interface TErrorResponseData {
-  errorType: string;
+  statusCode: number;
   message: string;
+  path: string;
 }
 
 export class ErrorResponse extends Error {
